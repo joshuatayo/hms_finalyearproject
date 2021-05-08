@@ -1,0 +1,138 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Patients Table</h2>
+                    {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist' %}
+                        <ul class="header-dropdown">
+                            <li><a href="{% url 'addpatientpage' %}"><i class="fa fa-plus"></i></a></li>
+                        </ul>   
+                    {% endif %}                            
+                </div>
+                <div class="body ">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom ">
+                        <thead>
+                            <tr>
+                                <th>Card No</th>
+                                <th>Full Name</th>
+                                <th>Gender</th>
+                                <th>Phone No</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist' %}
+                                    <th>Date Created</th>
+                                {% endif %}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Card No</th>
+                                <th>Full Name</th>
+                                <th>Gender</th>
+                                <th>Phone No</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist' %}
+                                    <th>Date Created</th>
+                                {% endif %}
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for patient in patients %}
+                                <tr>
+                                    <td>{{patient.patient_id}}</td>
+                                    <td>{{patient.firstname}} {{patient.middlename}} {{patient.surname}}</td>
+                                    <td>{{patient.gender}}</td>
+                                    <td>{{patient.phone_number}}</td>
+                                    {% if request.session.group == 'Administrator'%}<td>{{patient.staff}}</td>{% endif %}
+                                    {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist' %}
+                                        <td>{{patient.created_at}}</td>
+                                    {% endif %}
+                                    <td class="text-center"> 
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist' %}
+                                            <a class="mr-2" href="#bookAppointment{{patient.id}}" data-toggle="modal" data-target="#bookAppointment{{patient.id}}" data-toggle="tooltip" data-original-title="Appointment"><i class="fa fa-calendar"></i></a>
+                                            <div class="modal fade" id="bookAppointment{{patient.id}}" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="title" id="defaultModalLabel">Book Appointment</h4>
+                                                        </div>
+                                                        <form action="{% url 'bookappointment' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <div class="modal-body text-left">
+                                                                <div class="row clearfix">
+                                                                    <div class="col-lg-4 col-md-12">
+                                                                        <div class="form-group">    
+                                                                            <label>Patient Card Number <span class="badge-danger">*</span></label> 
+                                                                            <input type="text" class="form-control"  name="card_number" value="{{patient.patient_id}}"  readonly>         
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>First Name <span class="badge-danger">*</span></label>  
+                                                                            <input type="text" class="form-control" placeholder="First Name" value="{{patient.firstname}}" readonly>                                       
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>Surname <span class="badge-danger">*</span></label>  
+                                                                            <input type="text" class="form-control" placeholder="Surname" value="{{patient.surname}}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>Middle Name</label>  
+                                                                            <input type="text" class="form-control" placeholder="Middle Name" value="{{patient.name}}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>Gender <span class="badge-danger">*</span></label>  
+                                                                            <input type="text" class="form-control" placeholder="Gender" value="{{patient.gender}}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>Phone Number <span class="badge-danger">*</span></label>  
+                                                                            <input type="text" class="form-control" placeholder="Phone Number" value="{{patient.phone_number}}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3 col-md-12">
+                                                                        <div class="form-group">     
+                                                                            <label>Status </label>  
+                                                                            <select name="status" class="form-control" {% if request.session.group == 'Receptionist'%}disabled{%endif%}>
+                                                                                <option value="Queue" {% if request.session.group == 'Receptionist'%}selected{%endif%}>Queue</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary pull-right">Book</button>
+                                                                <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Doctor' or request.session.group == 'Nurse' or request.session.group == 'Pharmacist' or request.session.group == 'Accountant' %}
+                                            <a class="mr-2" href="{% url 'patientpreviewcard' patient.patient_id %}" data-toggle="tooltip" data-original-title="Patient Card"><i class="fa fa-folder"></i></a>
+                                        {% endif %}
+                                        {% if request.session.group == 'Administrator'%}
+                                            <a href="javascript:void(0);" title="Delete" class="fa fa-trash"></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,300 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-lg-8 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Add Drug
+                        <small>
+                            {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <i class="fa fa-check-circle"></i> {{ msg }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </small>   
+                    </h2>    
+                    <ul class="header-dropdown">
+                        <li><a data-toggle="collapse" href="#collapseAddDrug" role="button" aria-expanded="false" aria-controls="collapseAddDrug"><i class="icon-plus"></i></a></li>
+                    </ul>                      
+                </div>
+                <div class="body collapse" id="collapseAddDrug">
+                    <form action="{% url 'adddrug' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">     
+                                    <label>Invoice Id <span class="badge-danger">*</span></label>   
+                                    {{drugInventoryForm.invoiceid}}                                        
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">     
+                                    <label>Drug Name <span class="badge-danger">*</span></label>                                           
+                                    {{drugForm.name}}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div class="form-group">     
+                                    <label>Category <span class="badge-danger">*</span></label>                                           
+                                    {{drugForm.drugcategory}}
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">     
+                                    <label>Type <span class="badge-danger">*</span></label>                                           
+                                    {{drugForm.drugtype}}
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-12">
+                                <div class="form-group">     
+                                    <label>Quantity <span class="badge-danger">*</span></label>                                           
+                                    {{drugForm.quantity}}
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">     
+                                    <label>Price</label>                                           
+                                    {{drugForm.price}}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <button type="reset" class="btn btn-default">Cancel</button>
+                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="header">
+                    <h2>Drug Table<small></small> </h2>                            
+                </div>
+                <div class="body ">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for drug in drugs %}
+                                <tr>
+                                    <td>{{drug.name}}</td>
+                                    <td>{{drug.drugcategory.name}}</td>
+                                    <td>{{drug.drugtype}}</td>
+                                    <td>{{drug.quantity}}</td>
+                                    <td>{{drug.price}}</td>
+                                    <td class="text-center"> 
+                                        <small> 
+                                            <a href="#editDrug{{ drug.id }}" data-toggle="modal" data-target="#editDrug{{ drug.id }}" class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit" data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                            <a href="{% url 'deletedrug' drug.id %}" class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove" data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                        </small>
+                                    </td>
+                                    <div class="modal fade" id="editDrug{{ drug.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'editdrug' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ drug.id }}">
+                                                    <div class="modal-header">
+                                                        <h4 class="title" id="smallModalLabel">Edit Drug</h4>
+                                                    </div>
+                                                    <div class="modal-body"> 
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-6 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Name <span class="badge-danger">*</span></label>   
+                                                                    <input type="text" name="name" class="form-control" placeholder="Drug Name" value="{{ drug.name }}" required>                                      
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Drug Category <span class="badge-danger">*</span></label>   
+                                                                    <select class="form-control" name="drugcategory">
+                                                                        {% for drugCategory in drugCategories %}
+                                                                            <option value="{{ drugCategory.id }}" {% if drugCategory.name == '{{ drug.drugcategory.name }}' %}seleted{% endif %}>{{ drugCategory.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>                                        
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-5 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Type <span class="badge-danger">*</span></label> 
+                                                                    <select class="form-control" name="drugtype">
+                                                                        <option value="Injection" {% if drug.drugtype == 'Injection' %}selected{% endif %}>Injection</option>
+                                                                        <option value="Tablet" {% if drug.drugtype == 'Tablet' %}selected{% endif %}>Tablet</option>
+                                                                    </select>                                      
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Qty</label>   
+                                                                    <input type="number" name="quantity" class="form-control" disabled value="{{ drug.quantity }}">                                      
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Price</label>   
+                                                                    <input type="number" name="price" class="form-control" placeholder="Drug Price" disabled value="{{ drug.price }}">                                      
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="sumbit" class="btn btn-primary">SAVE CHANGES</button>
+                                                        <button type="reset" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Add Drug Category
+                        <small>
+                            {% if messages %}
+                                {% for msg in messages %}
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <i class="fa fa-check-circle"></i> {{ msg }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </small>
+                    </h2> 
+                    <ul class="header-dropdown">
+                        <li><a data-toggle="collapse" href="#collapseAddDrugCategory" role="button" aria-expanded="false" aria-controls="collapseAddDrugCategory"><i class="icon-plus"></i></a></li>
+                    </ul>                        
+                </div>
+                <div class="body collapse" id="collapseAddDrugCategory">
+                    <form action="{% url 'adddrugcategory' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row clearfix">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">     
+                                    <label>Name <span class="badge-danger">*</span></label>   
+                                    {{drugCategoryForm.name}}                                        
+                                </div>
+                            </div>
+                        </div>
+                        <button type="reset" class="btn btn-default">Cancel</button>
+                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="header">
+                    <h2>Category Table<small></small> </h2>                            
+                </div>
+                <div class="body">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for drugCategory in drugCategories %}
+                                <tr class="gradeA">
+                                    <td>{{drugCategory.name}} 
+                                        <small class="pull-right actions"> 
+                                            <a href="#editDrugCategory{{ drugCategory.id }}" data-toggle="modal" data-target="#editDrugCategory{{ drugCategory.id }}" class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit" data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                            <a href="{% url 'deletedrugcategory' drugCategory.id %}" class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove" data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                        </small>
+                                    </td>
+                                    <div class="modal fade" id="editDrugCategory{{ drugCategory.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog modal-sm" role="document">
+                                            <div class="modal-content">
+                                                <form action="{% url 'editdrugcategory' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{ drugCategory.id }}">
+                                                    <div class="modal-header">
+                                                        <h4 class="title" id="smallModalLabel">Edit Drug Category</h4>
+                                                    </div>
+                                                    <div class="modal-body"> 
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">     
+                                                                    <label>Name <span class="badge-danger">*</span></label>   
+                                                                    <input type="text" name="name" class="form-control" placeholder="Category Name" value="{{ drugCategory.name }}" required>                                      
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="sumbit" class="btn btn-primary">SAVE CHANGES</button>
+                                                        <button type="reset" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <div class="modal fade" id="smallModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <form action="{% url 'pharmacistadddrugcategory' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ drugCategory.id }}">
+                                <div class="modal-header">
+                                    <h4 class="title" id="smallModalLabel">Edit Drug Category</h4>
+                                </div>
+                                <div class="modal-body"> 
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group">     
+                                                <label>Name <span class="badge-danger">*</span></label>   
+                                                <input type="text" name="name" class="form-control" placeholder="Category Name" value="{{ drugCategory.name }}" required>                                      
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="sumbit" class="btn btn-primary">SAVE CHANGES</button>
+                                    <button type="reset" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

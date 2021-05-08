@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <h1>Admin Staff</h1>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{staffForm.firstname.label}}
+        {{staffForm.firstname}}
+        <br>
+        {{staffForm.middlename.label}}
+        {{staffForm.middlename}}
+        <br>
+        {{staffForm.surname.label}}
+        {{staffForm.surname}}
+        <br>
+        {{staffForm.email.label}}
+        {{staffForm.email}}
+        <br>
+        {{staffForm.phone_number.label}}
+        {{staffForm.phone_number}}
+        <br>
+        {{staffForm.dob.label}}
+        {{staffForm.dob}}
+        <br>
+        <!-- {{staffForm.group.label}}
+        {{staffForm.group}} -->
+        <br>
+        {{staffForm.user.label}}
+        {{staffForm.user}}
+        <br>
+        <br>
+        <input type="checkbox" name="usercheck" value="usercheck">User
+        <br>
+        <br>
+        <!-- {{userForm}} -->
+
+        <input type="submit" name="Submit">
+    </form>
+</body>
+</html>

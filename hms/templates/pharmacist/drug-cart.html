@@ -1,0 +1,24 @@
+{% for cart in carts %}
+    <tr id="drugCartDelUrl" >
+        <td>
+            <h6 class="billing-titles">{{cart.obj.name}} <span class="invoice-number"> <small>{{cart.obj.drugtype}}</small> </span></h6>
+        </td>
+        <td class="amount">{{cart.quantity}}</td>
+        <td class="amount">N{{cart.price}}</td>
+        <td class="action"><a href="#" id="drugCartDel">Delete</a></td>
+    </tr>
+{% endfor %}
+
+
+
+<script>
+    $('#drugCartDel').on('click', function() {
+        alert("working")
+        var url = $("#drugCartDelBtn").attr("data-delcart-url");
+        alert(url)
+        $.ajax({
+            type:'DELETE',
+            url: url
+        });
+    });
+</script>

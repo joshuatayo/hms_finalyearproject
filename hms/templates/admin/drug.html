@@ -1,0 +1,72 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <h1>Admin Drug</h1>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{drugInflowForm.invoiceid.label}}
+        {{drugInflowForm.invoiceid}}
+        {{drugForm.name.label}}
+        {{drugForm.name}}
+        {{drugForm.drugcategory.label}}
+        {{drugForm.drugcategory}}
+        {{drugForm.drugtype.label}}
+        {{drugForm.drugtype}}
+        {{drugForm.quantity.label}}
+        {{drugForm.quantity}}
+        {{drugForm.price.label}}
+        {{drugForm.price}}
+        <input type="submit" name="Submit">
+    </form>
+    <table style="border: 1px solid black;">
+        <tr>
+          <th>name</th>
+          <th>category</th>
+          <th>type</th>
+          <th>qty</th>
+          <th>price</th>
+        </tr>
+        {% for drug in drugs %}
+        <tr>
+          <td>{{drug.name}}</td>
+          <td>{{drug.drugcategory.name}}</td>
+          <td>{{drug.drugtype}}</td>
+          <td>{{drug.quantity}}</td>
+          <td>{{drug.price}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table style="border: 1px solid black;">
+        <tr>
+          <th>name</th>
+        </tr>
+        {% for drugCategory in drugCategories %}
+        <tr>
+          <td>{{drugCategory.name}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table style="border: 1px solid black;">
+        <tr>
+          <th>invoiceid</th>
+          <th>name</th>
+          <th>qty</th>
+          <th>staff</th>
+          <th>date</th>
+        </tr>
+        {% for drugInflow in drugInflows %}
+        <tr>
+          <td>{{drugInflow.invoiceid}}</td>
+          <td>{{drugInflow.drug.name}}</td>
+          <td>{{drugInflow.quantity}}</td>
+          <td>{{drugInflow.staff.firstname}}</td>
+          <td>{{drugInflow.date}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

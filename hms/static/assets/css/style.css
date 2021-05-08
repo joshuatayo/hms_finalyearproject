@@ -1,0 +1,13 @@
+.login-title {
+    color: #fff;
+}
+
+#clockbox {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+#editCardDrug, 
+#addCardDrug {
+    display: none;
+}

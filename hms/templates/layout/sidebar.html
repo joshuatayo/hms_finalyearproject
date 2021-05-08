@@ -1,0 +1,114 @@
+{% load static %}
+{% load active_link_tags %}
+<div id="left-sidebar" class="sidebar">
+    <div class="sidebar-scroll">
+        <div class="user-account">
+            {% if request.session.profile_image %}
+                <img src="{{ request.session.profile_image }}" class="rounded-circle user-photo" alt="User Profile Picture">
+            {% else %}
+                <img src="{% static 'assets/img/avatar.png' %}" class="rounded-circle user-photo" alt="User Profile Picture">
+            {% endif %}
+            <div class="dropdown">
+                <span>Welcome,</span>
+                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>{{ request.session.firstname }} {{ request.session.surname }}</strong></a>
+                <ul class="dropdown-menu dropdown-menu-right account">
+                    <li><a href="{% url 'staffprofile' %}"><i class="icon-user"></i>My Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="page-login.html"><i class="icon-power"></i>Logout</a></li>
+                </ul>
+            </div>
+            <hr>
+        </div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#menu">Menu</a></li>                
+            <li class="nav-item"><a class="nav-link">{{ request.session.group }}</a></li>            
+        </ul>
+            
+        <!-- Tab panes -->
+        <div class="tab-content p-l-0 p-r-0">
+            <div class="tab-pane active" id="menu">
+                <nav class="sidebar-nav">
+                    <ul class="main-menu metismenu">
+                        {% if request.session.group == 'Administrator' %}
+                            <li class="{% active_link 'admindashboard' 'active' %}"><a href="{% url 'admindashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li><a href="app-appointment.html"><i class="icon-calendar"></i>Appointment</a></li>
+                            <li class="{% active_link 'adminallstaff || adminaddstaff ' 'active' %}"><a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Staffs</span> </a>
+                                <ul>
+                                    <li><a href="{% url 'adminallstaff' %}">All Staffs</a></li>
+                                    <li><a href="{% url 'adminaddstaff' %}">Add Staff</a></li>
+                                    <!--  -->
+                                </ul>
+                            </li>
+                            <li><a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Patients</span> </a>
+                                <ul>
+                                    <li><a href="doctors-all.html">All Patients</a></li>
+                                    <li><a href="doctor-add.html">Add Patient</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                        {% if request.session.group == 'Doctor' %}
+                            <li class="{% active_link 'doctordashboard' 'active' %}"><a href="{% url 'doctordashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li class="{% active_link 'doctorappointmentpage' 'active' %}"><a href="{% url 'doctorappointmentpage' %}"><i class="icon-calendar"></i><span>Appointments</span></a></li>
+                            <li class="{% active_link 'inpatientpage || outpatientpage ' 'active' %}"><a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Treatment</span> </a>
+                                <ul>
+                                    <li><a href="{% url 'inpatientpage' %}">In-Patients</a></li>
+                                    <li><a href="{% url 'outpatientpage' %}">Out-Patient</a></li>
+                                </ul>
+                            </li>
+                            <li class="{% active_link 'allpatientpage' 'active' %}"><a href="{% url 'allpatientpage' %}"><i class="icon-user"></i><span>Patients</span></a></li>
+                        {% endif %}
+                        {% if request.session.group == 'Nurse' %}
+                            <li class="{% active_link 'nursedashboard' 'active' %}"><a href="{% url 'nursedashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li class="{% active_link 'inpatientpage || outpatientpage ' 'active' %}"><a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Treatment</span> </a>
+                                <ul>
+                                    <li><a href="{% url 'inpatientpage' %}">In-Patients</a></li>
+                                    <li><a href="{% url 'outpatientpage' %}">Out-Patient</a></li>
+                                </ul>
+                            </li>
+                            <li class="{% active_link 'allpatientpage' 'active' %}"><a href="{% url 'allpatientpage' %}"><i class="icon-user"></i><span>Patients</span></a></li>
+                        {% endif %}    
+
+                        {% if request.session.group == 'Pharmacist' %}
+                            <li class="{% active_link 'pharmacistdashboard' 'active' %}"><a href="{% url 'pharmacistdashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li class="{% active_link 'pharmacistdrug' 'active' %}"><a href="{% url 'pharmacistdrug' %}"><i class="fa fa-plus-square"></i><span>Drug</span></a></li>
+                            <li class="{% active_link 'inpatientpage || outpatientpage ' 'active' %}"><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-medkit"></i><span>Treatments</span> </a>
+                                <ul>
+                                    <li><a href="">CheckUp Patients</a></li>
+                                    <li><a href="{% url 'inpatientpage' %}">In-Patients</a></li>
+                                    <li><a href="{% url 'outpatientpage' %}">Out-Patient</a></li>
+                                </ul>
+                            </li>
+                            <li class="{% active_link 'allpatientpage' 'active' %}"><a href="{% url 'allpatientpage' %}"><i class="icon-user"></i><span>Patients</span></a></li>
+                        {% endif %}
+
+                        {% if request.session.group == 'Accountant' %}
+                            <li class="{% active_link 'accountantdashboard' 'active' %}"><a href="{% url 'accountantdashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li class="{% active_link 'cardpayment' 'active' %}"><a href="{% url 'cardpayment' %}"><i class="icon-wallet"></i><span>Card Payment</span></a></li>
+                            <li class="{% active_link 'inpatientpage || outpatientpage ' 'active' %}"><a href="javascript:void(0);" class="has-arrow"><i class="fa fa-medkit"></i><span>Treatments</span> </a>
+                                <ul>
+                                    <li><a href="">CheckUp Patients</a></li>
+                                    <li><a href="{% url 'inpatientpage' %}">In-Patients</a></li>
+                                    <li><a href="{% url 'outpatientpage' %}">Out-Patient</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                        {% if request.session.group == 'Receptionist' %}
+                            <li class="{% active_link 'receptionistdashboard' 'active' %}"><a href="{% url 'receptionistdashboard' %}"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                            <li class="{% active_link 'allpatientpage || addpatientpage' 'active' %}">
+                                <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Patients</span> </a>
+                                <ul>
+                                    <li><a href="{% url 'allpatientpage' %}">All Patients</a></li>
+                                    <li><a href="{% url 'addpatientpage' %}">Add Patient</a></li>
+                                </ul>
+                            </li>
+                            <li class="{% active_link 'bookappointment' 'active' %}"><a href="{% url 'bookappointment' %}"><i class="icon-calendar"></i><span>Appointments</span></a></li>                                    
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>            
+        </div>          
+    </div>
+</div>

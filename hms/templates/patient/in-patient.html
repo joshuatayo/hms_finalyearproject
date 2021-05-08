@@ -1,0 +1,80 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>In-Patients Treatment Table</h2>
+                    {% if request.session.group == 'Administrator' or request.session.group == 'Doctor' %}
+                        <ul class="header-dropdown">
+                            <li><a href="{% url 'allpatientpage' %}"><i class="fa fa-plus"></i></a></li>
+                        </ul>   
+                    {% endif %}                            
+                </div>
+                <div class="body ">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom ">
+                        <thead>
+                            <tr>
+                                <th>Treatment Id</th>
+                                <th>Card No</th>
+                                <th>Full Name</th>
+                                <th>Gender</th>
+                                <th>Phone No</th>
+                                <th>Status</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                <th>Date Created</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Treatment Id</th>
+                                <th>Card No</th>
+                                <th>Full Name</th>
+                                <th>Gender</th>
+                                <th>Phone No</th>
+                                <th>Status</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                <th>Date Created</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for patientTreatment in patientTreatments %}
+                                <tr>
+                                    <td>{{patientTreatment.treatment_id}}</td>
+                                    <td>{{patientTreatment.patient.patient_id}}</td>
+                                    <td>{{patientTreatment.patient.firstname}} {{patientTreatment.patient.middlename}} {{patientTreatment.patient.surname}}</td>
+                                    <td>{{patientTreatment.patient.gender}}</td>
+                                    <td>{{patientTreatment.patient.phone_number}}</td>
+                                    <td>{{patientTreatment.status}}</td>
+                                    <!-- {% if request.session.group == 'Administrator'%}<td>{{patient.staff}}</td>{% endif %} -->
+                                    <td>{{patientTreatment.created_at}}</td>
+                                    <td class="text-center"> 
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Doctor' or request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}
+                                            <a id="edit_treatment" class="mr-2" href="javascript:void(0);" data-edittreatment-url="{% url 'edittreatment' %}" onclick="editTreatment('{{patientTreatment.id}}')"><i class="fa fa-eye"></i></a>
+                                        {% endif %}
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Doctor' or request.session.group == 'Accountant'  %}
+                                            <a class="mr-2" href="{% url 'patientpreviewcard' patientTreatment.patient.patient_id %}"><i class="fa fa-folder"></i></a>
+                                        {% endif %}
+                                        {% if request.session.group == 'Administrator'%}
+                                            <a href="javascript:void(0);" title="Delete" class="fa fa-trash"></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <div class="modal fade" id="treatmentModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content" id="editTreatmentShow">
+                                        
+                                    </div>
+                                </div>
+                            </div> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

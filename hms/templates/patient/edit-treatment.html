@@ -1,0 +1,240 @@
+
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Edit Treatment</h4>
+            </div>
+        <form method="POST" id="updatetreatment" data-treatment-url="{% url 'edittreatment' %}">
+            <div class="modal-body"> 
+                    {% csrf_token %}
+                    <input type="hidden" id="treatmentId" name="treatment" value="{{ patientTreatment.id }}">
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">     
+                                <label>Complaint</label>                                           
+                                <textarea id="complaint" name="complaint" class="form-control" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}disabled{% endif %} rows="3">{{patientTreatment.complaint}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">     
+                                <label>Diagnosis</label>                                           
+                                <textarea id="diagnosis" name="diagnosis" class="form-control" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}disabled{% endif %} rows="3">{{patientTreatment.diagnosis}}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">     
+                                <label>Recommend</label>                                           
+                                <textarea id="recommend" name="recommend" class="form-control" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}disabled{% endif %} rows="3">{{patientTreatment.recommend}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <h6>Drug Prescription 
+                            <span class="ml-3">
+                                <a onclick="document.getElementById('editCardDrug').style.display = 'block'" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}hidden{% endif %}>
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </span>
+                        </h6>
+                        <div id="editCardDrug"> 
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">    
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-append">
+                                                <label class="input-group-text p-0" for="inputGroupSelect02" style="border:none;">
+                                                    <select name="drugtype" class="custom-select" id="typeofdrugEdit" data-drug-url="{% url 'ajaxloaddrug' %}" required>
+                                                        <option>Type</option>
+                                                        <option value="Capsules">Capsules</option>
+                                                        <option value="Injection">Injection</option>
+                                                        <option value="Liquid">Liquid</option>
+                                                        <option value="Tablet">Tablet</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <select name="drug" class="custom-select" id="drugTypeEdit" required> 
+                                                <option>Select Drug</option>
+                                                {% for drug in drugs %}
+                                                    <option value="{{ drug.id }}">{{ drug.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>            
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-7 col-sm-7">
+                                    <div class="form-group">   
+                                        <input type="number" name="quantity" class="form-control" id="drugQtyEdit" required placeholder="Qty">  
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-sm-3">
+                                    <div class="form-group">     
+                                        <button type="submit" class="btn btn-primary" id="submitDrugToCartEdit" data-cartedit-url="{% url 'addtocart' %}">Add</button> 
+                                    </div>
+                                </div>
+                                <div class="col-lg-1 col-md-2 col-sm-2">
+                                    <div class="form-group"> 
+                                        <a class="btn"  onclick="document.getElementById('editCardDrug').style.display = 'none'">
+                                            <i class="fa fa-times"></i>
+                                        </a>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table billing-history">
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Qty</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="drugCartEdit">
+                                
+                            </tbody>
+                        </table>
+
+                        <table class="table billing-history">
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Qty</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for drugPrescription in drugPrescriptions %}
+                                    <tr id="drugCartDelUrl">
+                                        {% if request.session.group == 'Administrator'%} 
+                                            <td><div class="media-object"><img src="../assets/images/xs/avatar1.jpg" alt="" width="35px" class="rounded-circle"></div></td>
+                                        {% endif %} 
+                                        <td><input type="checkbox" {% if drugPrescription.status == 'Checked' %}checked disabled{% endif %} name="drug_id" value="{{drugPrescription.id}}" {% if request.session.group == 'Doctor' or request.session.group == 'Nurse' or drugPrescription.status == ' ' %}hidden{% endif %}></td>
+                                        <td>
+                                            <h6 class="billing-titles">{{drugPrescription.drug.name}} <span class="invoice-number"> <small>{{drugPrescription.drug.drugtype}}</small> </span></h6>
+                                            <span class="text-muted">Date - {{drugPrescription.created_at}}</span>
+                                        </td>
+                                        <td class="amount">{{drugPrescription.quantity}}</td>
+                                        <td class="amount">N{{drugPrescription.price}}</td>
+                                        <td class="action" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}hidden{% endif %}><a href="{% url 'deletetreatmentdrug' drugPrescription.id %}">Delete</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <table class="table billing-history">
+                            <thead class="sr-only">
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Qty</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>
+                                        <select id="status" name="status" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}disabled{% endif %} class="form-control">
+                                            <option {% if patientTreatment.status == 'CheckUp' %}selected{%endif%} value="CheckUp">CheckUp</option>
+                                            <option {% if patientTreatment.status == 'InPatient' %}selected{%endif%} value="InPatient">InPatient</option>
+                                            <option {% if patientTreatment.status == 'OutPatient' %}selected{%endif%}value="OutPatient">OutPatient</option>
+                                            {% if patientTreatment.total_amount ==  patientTreatment.amount_paid %} 
+                                                <option {% if patientTreatment.status == 'DisCharge' %}selected{%endif%} value="DisCharge">DisCharge</option>
+                                            {% elif request.session.group == 'Administrator'%} 
+                                                <option {% if patientTreatment.status == 'DisCharge' %}selected{%endif%} value="DisCharge">DisCharge</option>
+                                            {% endif %} 
+                                        </select>
+                                    </td>
+                                    <td {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}hidden{% endif %}>Amount</td>
+                                    <td {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}hidden{% endif %}><input type="number" id="amount" name="amount" class="form-control" value="{{patientTreatment.amount}}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" {% if request.session.group == 'Nurse' or request.session.group == 'Pharmacist' %}hidden{% endif %} class="btn btn-primary" id="submitUpdateTreatment">SAVE CHANGES</button>
+                <button type="button" {% if request.session.group == 'Doctor' or request.session.group == 'Nurse' %}hidden{% endif %} class="btn btn-primary" id="submitUpdateTreatmentDrug" data-treatmentdrug-url="{% url 'updatereatmentdrug' %}">Update Drug</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+            </div>
+        </form>
+<script>
+    $("#typeofdrugEdit").change(function () {
+        var url = $("#typeofdrugEdit").attr("data-drug-url");
+        var dType = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'drugtype': dType
+            },
+            success: function (data) {
+                $("#drugTypeEdit").html(data);
+            }
+        });
+    });
+
+    $('#submitDrugToCartEdit').click(function(event){
+        event.preventDefault(); //so that we stop normal form submit.
+        
+        var url = $("#submitDrugToCartEdit").attr("data-cartedit-url");
+        var drugId = $("#drugTypeEdit").val();
+        var qty = $("#drugQtyEdit").val();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                'drug': drugId,
+                'quantity': qty,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                $("#drugCartEdit").html(data)
+                $("#typeofdrugEdit").val("Type");
+                $("#drugTypeEdit").val("Select Drug");
+                $("#drugQtyEdit").val(" ");
+            }
+        });
+   });
+
+    $('#submitUpdateTreatment').click(function(event){
+        event.preventDefault(); //so that we stop normal form submit.
+        var url = $("#updatetreatment").attr("data-treatment-url");
+        alert(url)
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                'treatment': $("#treatmentId").val(),
+                'complaint': $("#complaint").val(),
+                'diagnosis': $("#diagnosis").val(),
+                'recommend': $("#recommend").val(),
+                'status': $("#status").val(),
+                'amount': $("#amount").val(),
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                location.reload();
+            }
+        });
+    });
+
+    $('#submitUpdateTreatmentDrug').click(function(event){
+        event.preventDefault(); //so that we stop normal form submit.
+        var url = $("#submitUpdateTreatmentDrug").attr("data-treatmentdrug-url");
+        var id = []
+        $.each($("input[name='drug_id']:checked"), function(){
+            id.push($(this).val());
+        });
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                'id': id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                location.reload();
+            }
+        });
+    });
+</script>
+
+        

@@ -1,0 +1,79 @@
+<div class="card invoice1">                        
+    <div class="body">
+        <div class="invoice-top clearfix">
+            {% if request.session.group == 'Administrator' %}
+            <div class="logo">
+                <img src="{{ treatmentPayment.staff.profile_image.url }}" alt="user" class="rounded-circle img-fluid">
+            </div>
+            <div class="info">
+                <h6><a href="#">{{treatmentPayment.staff.firstname}} {{treatmentPayment.staff.middlename}} {{treatmentPayment.staff.surname}}</a></h6>
+                <p><i class="fa fa-envelope"></i> <a href="mailto:{{treatmentPayment.staff.email}}">{{treatmentPayment.staff.email}}</a><br>
+                    <i class="fa fa-phone"></i> <a href="tel:{{treatmentPayment.staff.phone_number}}"> {{treatmentPayment.staff.phone_number}}</a>
+                </p>
+            </div>
+            {% endif %}
+            <div class="title">
+                <h4>Invoice {{treatmentPayment.invoice_id}}</h4>
+                <p>Issued by: {{treatmentPayment.staff.firstname}} {{treatmentPayment.staff.surname}}<br>
+                    Payment Date: {{treatmentPayment.created_at}}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="invoice-top clearfix"> 
+            <div class="info ml-0">
+                <h6>Patient Name</h6>
+                <p>{{treatmentPayment.patienttreatment.patient.firstname}} {{treatmentPayment.patienttreatment.patient.middle}} {{treatmentPayment.patienttreatment.patient.surname}}<br>
+                    {{treatmentPayment.patienttreatment.patient.patient_id}}<br>
+                    <small><i class="fa fa-envelope"></i> {{treatmentPayment.patienttreatment.patient.email}}</small></p>
+                <h6>Treatment - {{treatmentPayment.patienttreatment.treatment_id}} </h6>
+            </div>
+            <div class="title">
+                <h6>Paid By</h6>
+                <p>{{treatmentPayment.fullname}}<br>
+                    Payment Method - {{treatmentPayment.method}}<br>
+                    <i class="fa fa-phone"></i> <a href="tel:{{treatmentPayment.mobile_no}}">{{treatmentPayment.mobile_no}}</a></p>
+            </div>
+    
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for drugPrescription in drugPrescriptions %}
+                        <tr>
+                            <td>1</td>
+                            <td>{{drugPrescription.drug.name}}</td>
+                            <td>{{drugPrescription.quantity}}</td>
+                            <td>N{{drugPrescription.price}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="row clearfix">
+            <div class="col-md-6">
+            
+            </div>
+            <div class="col-md-6 text-right">
+                <p class="m-b-0">Sub-total: N {{totalAmount}}</p>
+                <p class="m-b-0">Treatment: N {{treatmentPayment.patienttreatment.amount}}</p>
+                <p class="m-b-0"><b>Total:</b> N {{treatmentPayment.patienttreatment.total_amount}}</p>                                     
+                <h3 class="m-b-0 m-t-10">Paid: N {{treatmentPayment.amount_paid}}</h3>
+            </div>                                    
+            <div class="hidden-print col-md-12 text-right">
+                <hr>
+                <button class="btn btn-outline-secondary"><i class="icon-printer"></i></button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>E-Folder Payments Table</h2>
+                    <ul class="header-dropdown">
+                        <li><a href="#addCardPayment" data-toggle="modal" data-target="#addCardPayment"><i class="fa fa-plus"></i></a></li>
+                        <div class="modal fade" id="addCardPayment" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="title" id="defaultModalLabel">Payment For E-Folder</h4>
+                                    </div>
+                                    <form action="" method="POST">
+                                        {% csrf_token %}
+                                        <div class="modal-body"> 
+                                            <div class="row clearfix">
+                                                <div class="col-lg-8 col-md-12">
+                                                    <div class="form-group">     
+                                                        <label>Full Name <span class="badge-danger">*</span></label>   
+                                                        {{cardPaymentForm.name}}                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-12">
+                                                    <div class="form-group">     
+                                                        <label>Amount <span class="badge-danger">*</span></label>   
+                                                        {{cardPaymentForm.amount}}                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </ul>                            
+                </div>
+                <div class="body ">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom">
+                        <thead>
+                            <tr>
+                                <th>Pay By</th>
+                                <th>Card Id</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Pay By</th>
+                                <th>Card Id</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for cardPayment in cardPayments %}
+                                {% if request.session.group == 'Accountant' %}
+                                    {% if not cardPayment.patient %}
+                                        <tr>
+                                            <td>{{cardPayment.name}}</td>
+                                            <td>{{cardPayment.card_id}}</td>
+                                            <td>{{cardPayment.amount}}</td>
+                                            <td>{{cardPayment.created_at}}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr>
+                                        <td><a href=""><i class="fa fa-trash"></i></a> {{cardPayment.name}}</td>
+                                        <td><a href="">{{cardPayment.patient.firstname }} {{cardPayment.patient.surname }}</a><br><small>{{cardPayment.card_id}}</small> </td>
+                                        <td>{{cardPayment.amount}}</td>
+                                        <td>{{cardPayment.created_at}}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

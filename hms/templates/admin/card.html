@@ -1,0 +1,20 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <h1>Admin Patient Card</h1>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <p>{{patient.firstname}}</p>
+    <p>{{patient.middlename}}</p>
+    <p>{{patient.surname}}</p>
+    <p>{{patient.dob}}</p>
+    <div>
+        {{patientTreatmentForm}}
+        <br>
+        <br>
+        {{drugPrescriptionForm}}
+    </div>
+</body>
+</html>

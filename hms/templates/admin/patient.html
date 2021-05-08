@@ -1,0 +1,24 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <h1>Admin Patient</h1>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <table style="border: 1px solid black;">
+        <tr>
+            <th>Patient Id</th>
+            <th>firstname</th>
+            <th>surname</th>
+        </tr>
+        {% for patient in patients %}
+        <tr>
+            <td><a href="{% url 'adminpatientcard' patient.patient_id %}">{{patient.patient_id}}</a></td>
+            <td>{{patient.firstname}}</td>
+            <td>{{patient.surname}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

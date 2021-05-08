@@ -1,0 +1,79 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Appointment Table </h2>  
+                    <small>
+                        {% if messages %}
+                            {% for msg in messages %}
+                                <div class="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <i class="fa fa-check-circle"></i> {{ msg }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </small> 
+                    <ul class="header-dropdown">
+                        {% if request.session.group == 'Administrator'%}
+                            <li><a href="{% url 'receptionistpatient' %}"><i class="fa fa-calendar"></i></a></li>
+                        {% elif request.session.group == 'Receptionist' %}
+                            <li><a href="{% url 'receptionistpatient' %}"><i class="fa fa-calendar"></i></a></li>
+                        {% endif %}
+                    </ul>                          
+                </div>
+                <div class="body ">
+                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-custom ">
+                        <thead>
+                            <tr>
+                                <th>Card No</th>
+                                <th>Patient Name</th>
+                                <th>Phone No</th>
+                                <th>Gender</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Card No</th>
+                                <th>Patient Name</th>
+                                <th>Phone No</th>
+                                <th>Gender</th>
+                                {% if request.session.group == 'Administrator'%}<th>Staff</th>{% endif %}
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr>
+                                    <td>{{appointment.patient.patient_id}}</td>
+                                    <td>{{appointment.patient.firstname}} {{appointment.patient.middlename}} {{appointment.patient.surname}}</td>
+                                    <td>{{appointment.patient.phone_number}}</td>
+                                    <td>{{appointment.patient.gender}}</td>
+                                    {% if request.session.group == 'Administrator'%}<td>{{appointment.staff}}</td>{% endif %}
+                                    <td>{{appointment.status}}</td>
+                                    <td>{{appointment.created_at}}</td>
+                                    <td class="text-center"> 
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Doctor' or request.session.group == 'Nurse' %}
+                                            <a class="mr-2" href="{% url 'patientpreviewcard' appointment.patient.patient_id %}"><i class="fa fa-folder"></i></a>
+                                        {% endif %}
+                                        {% if request.session.group == 'Administrator' or request.session.group == 'Receptionist'%}
+                                            <a href="javascript:void(0);" title="Delete"><i class="fa fa-trash"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

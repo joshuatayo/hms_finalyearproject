@@ -1,0 +1,51 @@
+{% for treatmentPayment in treatmentPayments %}
+    <li>
+        <small>Paid :- <b class="ml-2">N{{treatmentPayment.amount_paid}} - </b>{{treatmentPayment.method}}
+            <br/>
+            <small>{{treatmentPayment.created_at}}</small>
+            <span class="ml-3">
+                <a href="javascript:void(0);" onclick="invoicePaid('{{treatmentPayment.id}}')" id="invoicePaid" data-invoicepaid-url="{% url 'showpaymentinvoice'%}" class="m-2"><i class="fa fa-eye"></i></a>
+                <a href="javascript:void(0);" onclick="deletePaid('{{treatmentPayment.id}}')" id="deletePaid" data-deletepaid-url="{% url 'deletepayment'%}" class="m-2"><i class="fa fa-trash"></i></a>
+            </span>
+        </small>
+    </li>
+{% endfor %}
+<div class="modal fade" id="invoicePaidModals" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="modalInvoicePaid"> 
+                   
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deletePaid(id) {
+        var url = $("#deletePaid").attr("data-deletepaid-url");
+        var paidId = id;
+        $.ajax({
+            url: url,
+            data: {
+                'paidId': paidId,
+            },
+            success: function (data) {
+                $("#paid").html(data);
+            }
+        });
+    }
+    function invoicePaid(id) {
+        var url = $("#invoicePaid").attr("data-invoicepaid-url");
+        var paidId = id;
+        $.ajax({
+            url: url,
+            data: {
+                'paidId': paidId,
+            },
+            success: function (data) {
+                $("#invoicePaidModals").modal("show");
+                $("#modalInvoicePaid").html(data);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Anointed Hospital</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="HMS">
+    <meta name="author" content="Final Project">
+    <!-- <meta http-equiv="refresh" content="2"> -->
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/sweetalert/sweetalert.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/vendor/dropify/css/dropify.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/parsleyjs/css/parsley.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+</head>
+<body class="theme-cyan">
+    
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="m-t-30"><img src="{% static 'assets/images/logo-icon.svg' %}" width="48" height="48" alt="Lucid"></div>
+            <p>Please wait...</p>        
+        </div>
+    </div>
+    <!-- Overlay For Sidebars -->
+
+    <div id="wrapper">
+        {% include 'layout/navbar.html' %}
+
+        {% include 'layout/sidebar.html' %}
+    
+        <div id="main-content">
+            <div class="container-fluid">
+                <div class="block-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-8 col-sm-12">
+                            <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> {{ pageTitle }}</h2>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>                            
+                                <li class="breadcrumb-item active">{{ pageTitle }}</li>
+                            </ul>
+                        </div>            
+                        <div class="col-lg-6 col-md-4 col-sm-12 text-right">
+                            <div id="clockbox"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {% block content %}
+
+                {% endblock %}    
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Javascript -->
+    <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+    <script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
+    <script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> <!-- Jquery Knob-->
+    <script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> <!-- flot charts Plugin Js -->
+    <script src="{% static 'assets/vendor/toastr/toastr.js' %}"></script>
+    <script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
+    <script src="{% static 'assets/bundles/easypiechart.bundle.js' %}"></script>
+    <script src="{% static 'assets/vendor/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/dropify/js/dropify.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/parsleyjs/js/parsley.min.js' %}"></script>
+
+    <script src="{% static 'assets/bundles/datatablescripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js' %}"></script>
+    <!-- <script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.html5.min.js' %}"></script> -->
+    <script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.print.min.js' %}"></script>
+
+    <script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/index.js' %}"></script>
+    <script src="{% static 'assets/js/pages/ui/dialogs.js' %}"></script>
+    <script src="{% static 'assets/js/pages/forms/dropify.js' %}"></script>
+    <!-- <script src="{% static 'assets/vendor/toastr/toastr.js' %}"></script> -->
+    <script src="{% static 'assets/js/pages/tables/jquery-datatable.js' %}"></script>
+    <script src=""></script>
+    <script>
+        function GetClock(){
+            var d=new Date();
+            var nmonth=(d.getMonth()+1),ndate=d.getDate(),nyear=d.getFullYear();
+            if(nmonth<=9) nmonth="0"+nmonth;
+            if(ndate<=9) ndate="0"+ndate;
+            var nhour=d.getHours(),nmin=d.getMinutes(),nsec=d.getSeconds(),ap;
+            
+            if(nhour==0){ap=" AM";nhour=12;}
+            else if(nhour<12){ap=" AM";}
+            else if(nhour==12){ap=" PM";}
+            else if(nhour>12){ap=" PM";nhour-=12;}
+            
+            if(nmin<=9) nmin="0"+nmin;
+            if(nsec<=9) nsec="0"+nsec;
+            
+            var clocktext=""+nyear+"-"+nmonth+"-"+ndate+" "+nhour+":"+nmin+":"+nsec+ap+"";
+            document.getElementById('clockbox').innerHTML=clocktext;
+        }
+            
+        GetClock();
+        setInterval(GetClock,1000);
+
+        $('.btn-toastr').on('click', function() {
+            $context = $(this).data('context');
+            $message = $(this).data('message');
+            $position = $(this).data('position');
+
+            if ($context === '') {
+                $context = 'info';
+            }
+
+            if ($position === '') {
+                $positionClass = 'toast-bottom-right';
+            } else {
+                $positionClass = 'toast-' + $position;
+            }
+
+            toastr.remove();
+            toastr[$context]($message, '', {
+                positionClass: $positionClass
+            });
+        });
+
+        $('#basic-form').parsley();
+
+        $("#cardNumberSearch").click(function(){
+            var cardNumber = $('#cardNumber').val();
+            var url = $("#appointmentForm").attr("data-diagnostic-url");
+            $.ajax
+            ({ 
+                type: "GET",
+                url: url,
+                data: {
+                    'card_number': cardNumber
+                },
+                success: function (data) {
+                   $('#bookAppointment').html(data);
+                }
+            });
+        });
+
+        $(document).ready(function(){
+
+            $("#editDrugCategory").click(function(){
+                alert("Data:");
+            });
+        });
+
+        $("#typeofdrug").change(function () {
+            var url = $("#typeofdrug").attr("data-drug-url");
+            var dType = $(this).val();
+            $.ajax({
+                url: url,
+                data: {
+                    'drugtype': dType
+                },
+                success: function (data) {
+                    $("#drugType").html(data)
+                }
+            });
+        });
+
+        $('#addtocart').click(function(event){
+            event.preventDefault(); //so that we stop normal form submit.
+            var url = $("#addtocart").attr("data-cart-url");
+            var drugId = $("#drugType").val();
+            var qty = $("#drugQty").val();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    'drug': drugId,
+                    'quantity': qty,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    $("#drugCart").html(data)
+                    $("#typeofdrug").val("Type");
+                    $("#drugType").val(" ");
+                    $("#drugQty").val(" ");
+                }
+            });
+       });
+
+
+        function editTreatment(id) {
+            var url = $("#edit_treatment").attr("data-edittreatment-url");
+            var treatmentId = id;
+            $.ajax({
+                url: url,
+                data: {
+                    'treatmentId': treatmentId,
+                },
+                success: function (data) {
+                    $("#treatmentModal").modal("show");
+                    $("#editTreatmentShow").html(data)
+                }
+            });
+        }
+
+        $('#makePayments').click(function(event){
+            alert("this")
+            event.preventDefault(); //so that we stop normal form submit.
+            var url = $("#makePaymentForm").attr("data-payment-url");
+            var drugId = $("#drugType").val();
+            var qty = $("#drugQty").val();
+            alert(url)
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    'treatment': $("#treatment_id").val(),
+                    'fullname': $("#fullname").val(),
+                    'mobile_no': $("#mobile_no").val(),
+                    'method': $("#method").val(),
+                    'amount_paid': $("#amount_paid").val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (data) {
+                    $("#fullname").val(" ");
+                    $("#mobile_no").val(" ");
+                    $("#method").val("Method");
+                    $("#amount_paid").val(" ");
+                    $(".makePaymentForm").modal("hide");
+                }
+            });
+        });
+
+        function showPayment(id) {
+            var url = $("#clickPaid").attr("data-showpayment-url");
+            var treatmentId = id;
+            $.ajax({
+                url: url,
+                data: {
+                    'treatmentId': treatmentId,
+                },
+                success: function (data) {
+                    $("#paid"+treatmentId).html(data);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+{% extends 'layout/layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Patient Drug Table</h2>                            
+                </div>
+                <div class="body">
+                    <table class="table table-bordered table-hover table-striped" cellspacing="0" id="addrowExample">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr class="gradeA">
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td class="actions">
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr class="gradeA">
+                                <td>Garrett Winters</td>
+                                <td>Accountant</td>
+                                <td>Tokyo</td>
+                                <td class="actions">
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr class="gradeA">
+                                <td>Jena Gaines</td>
+                                <td>Office Manager</td>
+                                <td>London</td>
+                                <td class="actions">
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <table class="table table-bordered table-hover table-striped dataTable js-exportable" id="addrowExample">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr class="gradeA">
+                                <td>joshua</td>
+                                <td>gggg</td>
+                                <td>sss</td>
+                                <td>ss</td>
+                                <td>sss</td>
+                                <td class="actions text-center">
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></button>
+                                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                            {% for drug in drugs %}
+                                <tr class="gradeA">
+                                    <td>{{drug.name}}</td>
+                                    <td>{{drug.drugcategory.name}}</td>
+                                    <td>{{drug.drugtype}}</td>
+                                    <td>{{drug.quantity}}</td>
+                                    <td>{{drug.price}}</td>
+                                    <td class="actions">
+                                        <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                                        data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer" aria-hidden="true"></i></a>
+                                        <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                                        data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close" aria-hidden="true"></i></a>
+                                        <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                                        data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil" aria-hidden="true"></i></a>
+                                        <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                                        data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
